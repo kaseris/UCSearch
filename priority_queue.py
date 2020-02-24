@@ -9,7 +9,7 @@ class PriorityQueue(object):
         return ' '.join([str(i) for i in self._queue])
 
     def insert(self, priority, item):
-        heapq.heappush(self._queue, (priority, item))
+        heapq.heappush(self._queue, item)
 
     def pop(self):
         return heapq.heappop(self._queue)
