@@ -26,6 +26,7 @@ class UCSearch:
                 print("Cost: {}, State: {}, Path: {}".format(cost, node, path))
 
             if node==goal:
+                print("\nSolution Found!")
                 return path
 
             # Need to convert the networkx graph to a python dictionary. Makes my
