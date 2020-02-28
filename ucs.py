@@ -1,4 +1,4 @@
-from priority_queue import PriorityQueue
+from priority_queue import *
 
 class UCSearch:
     def __init__(self, graph):
@@ -42,4 +42,6 @@ class UCSearch:
                 child_cost = vals['weight']
                 if child_node not in self._explored or child_node not in self._frontier:
                     self._frontier.insert((cost + child_cost, child_node, path))
+                elif child_node in self._frontier and isCostHigher(self._frontier, child_node, child_cost):
+                    replace(self._frontier, (cost + child_cost, child_node, path))
             self._explored[node] = cost
