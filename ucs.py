@@ -15,6 +15,8 @@ class UCSearch:
                 return None
 
             cost, node, path = self._frontier.pop()
+            # Replace the frontier that has lower cost than the child's node, by
+            # letting the priority queue popping an entry
             if node in self._explored and self._explored[node] < cost:
                 continue
 
@@ -24,6 +26,7 @@ class UCSearch:
             # the path that we took to get there.
             if verbose:
                 print("Cost: {}, State: {}, Path: {}".format(cost, node, path))
+                print("Explored: {}".format(list(self._explored.keys())))
 
             if node==goal:
                 print("\nSolution Found!")
@@ -37,6 +40,6 @@ class UCSearch:
             for key, vals in graphToDict.items():
                 child_node = key
                 child_cost = vals['weight']
-                if child_node not in self._explored or child_node not in path:
+                if child_node not in self._explored or child_node not in self._frontier:
                     self._frontier.insert((cost + child_cost, child_node, path))
             self._explored[node] = cost

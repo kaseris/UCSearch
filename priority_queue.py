@@ -31,3 +31,4 @@ if __name__ == '__main__':
     print(node in pq) # False
     node = 'london'
     print(node in pq) # True
+    print(pq)
