@@ -10,13 +10,13 @@ class UCSearch:
 
     def ucs(self, start, goal, verbose=True):
         node = start
-        self._frontier.insert((0, node, []))
+        self._frontier.insert((0, node, 0.0, []))
         while self._frontier:
             if(self._frontier.isEmpty()):
                 print('\nNo Solution.')
                 return None
 
-            cost, node, path = self._frontier.pop()
+            cost, node, time, path = self._frontier.pop()
             if node in self._explored and self._explored[node] < cost:
                 continue
 
@@ -25,7 +25,7 @@ class UCSearch:
             # Show the cumulative cost to get to a state, the current state and
             # the path that we took to get there.
             if verbose:
-                print("\nCost: {}, State: {}, Path: {}".format(cost, node, path))
+                print("\nCost: {}, State: {}, Time: {}, Path: {}".format(cost, node, time, path))
                 print("Explored: {}".format(list(self._explored.keys())))
                 print("Frontier: {}".format(self._frontier))
             if node==goal:
@@ -40,8 +40,9 @@ class UCSearch:
             for key, vals in graphToDict.items():
                 child_node = key
                 child_cost = vals[self._opt_att]
+                child_time = vals['time']
                 if child_node not in self._explored or child_node not in self._frontier:
-                    self._frontier.insert((cost + child_cost, child_node, path))
+                    self._frontier.insert((cost + child_cost, child_node, time + child_time, path))
                 elif child_node in self._frontier and isCostHigher(self._frontier, child_node, child_cost):
-                    replace(self._frontier, (cost + child_cost, child_node, path))
+                    replace(self._frontier, (cost + child_cost, child_node, time + child_time, path))
             self._explored[node] = cost

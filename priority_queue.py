@@ -1,7 +1,7 @@
 import heapq
 
 def isCostHigher(pq, key, cost):
-    for c, k, _ in pq._queue:
+    for c, k, _, _ in pq._queue:
         if key==k and cost > c:
             return True
         return False
@@ -24,7 +24,7 @@ class PriorityQueue(object):
 
     def __contains__(self, key):
         """Enables the 'in' operator to work."""
-        return key in [key for _, key, _ in self._queue]
+        return key in [key for _, key, _, _ in self._queue]
 
     def insert(self, item):
         heapq.heappush(self._queue, item)
@@ -51,4 +51,9 @@ if __name__ == '__main__':
     print(isCostHigher(pq, child_node, child_cost)) # True
     print("\nTesting replace()...")
     replace(pq, (child_cost, child_node, ['brighton', 'london']))
+    print(pq)
+
+    print("\nTesting the statement")
+    if isCostHigher(pq, child_node, child_cost):
+        replace(pq, (child_cost, child_node, ['brighton', 'london']))
     print(pq)
