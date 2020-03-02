@@ -1,10 +1,12 @@
 from priority_queue import *
 
 class UCSearch:
-    def __init__(self, graph):
+    def __init__(self, graph, optimisation_att='weight'):
         self._graph = graph
         self._frontier = PriorityQueue()
         self._explored = {}
+        self._opt_att = optimisation_att
+        print("Created a new UCS pathfinder optimising for: {}".format(self._opt_att))
 
     def ucs(self, start, goal, verbose=True):
         node = start
@@ -15,8 +17,6 @@ class UCSearch:
                 return None
 
             cost, node, path = self._frontier.pop()
-            # Replace the frontier that has lower cost than the child's node, by
-            # letting the priority queue popping an entry
             if node in self._explored and self._explored[node] < cost:
                 continue
 
@@ -25,9 +25,9 @@ class UCSearch:
             # Show the cumulative cost to get to a state, the current state and
             # the path that we took to get there.
             if verbose:
-                print("Cost: {}, State: {}, Path: {}".format(cost, node, path))
+                print("\nCost: {}, State: {}, Path: {}".format(cost, node, path))
                 print("Explored: {}".format(list(self._explored.keys())))
-
+                print("Frontier: {}".format(self._frontier))
             if node==goal:
                 print("\nSolution Found!")
                 return path
@@ -39,7 +39,7 @@ class UCSearch:
             # are the names of the state and the val['weight'] are the costs.
             for key, vals in graphToDict.items():
                 child_node = key
-                child_cost = vals['weight']
+                child_cost = vals[self._opt_att]
                 if child_node not in self._explored or child_node not in self._frontier:
                     self._frontier.insert((cost + child_cost, child_node, path))
                 elif child_node in self._frontier and isCostHigher(self._frontier, child_node, child_cost):
