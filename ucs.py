@@ -36,11 +36,14 @@ class UCSearch:
             # life simpler.
             graphToDict = dict(self._graph[node])
             # Get the children nodes and their costs. The keys of the dictionary
-            # are the names of the state and the val['weight'] are the costs.
+            # are the names of the state and the val['self._opt_att'] are the costs.
             for key, vals in graphToDict.items():
                 child_node = key
                 child_cost = vals[self._opt_att]
-                child_time = vals['time']
+                if 'time' in graphToDict.items():
+                    child_time = vals['time']
+                else:
+                    child_time = 0.0
                 if child_node not in self._explored or child_node not in self._frontier:
                     self._frontier.insert((cost + child_cost, child_node, time + child_time, path))
                 elif child_node in self._frontier and isCostHigher(self._frontier, child_node, child_cost):
