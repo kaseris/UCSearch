@@ -10,30 +10,32 @@ class UCSearch:
 
     def ucs(self, start, goal, verbose=True):
         node = start
-        self._frontier.insert((0, node, []))
+        self._frontier.insert((0, node, [start]))
         iterations = 0
         while self._frontier:
             if(self._frontier.isEmpty()):
                 print('\nNo Solution.')
                 return None
 
+            if verbose:
+                # print("\nCost: {}, State: {}, Path: {}".format(cost, node, path))
+                print("\nFrontier: {}".format(self._frontier))
+                print("Explored: {}".format(list(self._explored.keys())))
+                
             cost, node, path = self._frontier.pop()
             if node in self._explored and self._explored[node] < cost:
                 continue
 
             # Create the path to the Solution
-            path = path + [node]
+            # + [child_node]path = path + [node]
             # Show the cumulative cost to get to a state, the current state and
             # the path that we took to get there.
-            if verbose:
-                print("\nCost: {}, State: {}, Path: {}".format(cost, node, path))
-                print("Explored: {}".format(list(self._explored.keys())))
-                print("Frontier: {}".format(self._frontier))
+
             if node==goal:
                 print("\nSolution Found!")
                 print("\nCompleted in {} iterations".format(iterations))
                 print("Path: {}, Cost: {}".format(path, cost))
-                return path
+                return
             self._explored[node] = cost
             # Need to convert the networkx graph to a python dictionary. Makes my
             # life simpler.
@@ -48,9 +50,9 @@ class UCSearch:
                 # else:
                 #     child_time = 0.0
                 if child_node not in self._explored:
-                    self._frontier.insert((cost + child_cost, child_node, path))
+                    self._frontier.insert((cost + child_cost, child_node, path + [child_node]))
                 elif child_node in self._frontier and isCostHigher(self._frontier, child_node, cost + child_cost):
-                    replace(self._frontier, (cost + child_cost, child_node, path))
+                    replace(self._frontier, (cost + child_cost, child_node, path + [child_node]))
                     if verbose:
                         print("Replacing: {}, New cost: {}".format(child_node, cost + child_cost))
 
