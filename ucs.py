@@ -11,6 +11,7 @@ class UCSearch:
     def ucs(self, start, goal, verbose=True):
         node = start
         self._frontier.insert((0, node, 0.0, []))
+        iterations = 0
         while self._frontier:
             if(self._frontier.isEmpty()):
                 print('\nNo Solution.')
@@ -30,8 +31,10 @@ class UCSearch:
                 print("Frontier: {}".format(self._frontier))
             if node==goal:
                 print("\nSolution Found!")
+                print("\nCompleted in {} iterations".format(iterations))
+                print("Path: {}, Cost: {}".format(path, cost))
                 return path
-
+            self._explored[node] = cost
             # Need to convert the networkx graph to a python dictionary. Makes my
             # life simpler.
             graphToDict = dict(self._graph[node])
@@ -44,8 +47,11 @@ class UCSearch:
                     child_time = vals['time']
                 else:
                     child_time = 0.0
-                if child_node not in self._explored or child_node not in self._frontier:
+                if child_node not in self._explored:
                     self._frontier.insert((cost + child_cost, child_node, time + child_time, path))
-                elif child_node in self._frontier and isCostHigher(self._frontier, child_node, child_cost):
+                elif child_node in self._frontier and isCostHigher(self._frontier, child_node, cost + child_cost):
                     replace(self._frontier, (cost + child_cost, child_node, time + child_time, path))
-            self._explored[node] = cost
+                    if verbose:
+                        print("Replacing: {}, New cost: {}".format(child_node, cost + child_cost))
+
+            iterations += 1
