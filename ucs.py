@@ -10,14 +10,14 @@ class UCSearch:
 
     def ucs(self, start, goal, verbose=True):
         node = start
-        self._frontier.insert((0, node, 0.0, []))
+        self._frontier.insert((0, node, []))
         iterations = 0
         while self._frontier:
             if(self._frontier.isEmpty()):
                 print('\nNo Solution.')
                 return None
 
-            cost, node, time, path = self._frontier.pop()
+            cost, node, path = self._frontier.pop()
             if node in self._explored and self._explored[node] < cost:
                 continue
 
@@ -26,7 +26,7 @@ class UCSearch:
             # Show the cumulative cost to get to a state, the current state and
             # the path that we took to get there.
             if verbose:
-                print("\nCost: {}, State: {}, Time: {}, Path: {}".format(cost, node, time, path))
+                print("\nCost: {}, State: {}, Path: {}".format(cost, node, path))
                 print("Explored: {}".format(list(self._explored.keys())))
                 print("Frontier: {}".format(self._frontier))
             if node==goal:
@@ -43,14 +43,14 @@ class UCSearch:
             for key, vals in graphToDict.items():
                 child_node = key
                 child_cost = vals[self._opt_att]
-                if 'time' in graphToDict.items():
-                    child_time = vals['time']
-                else:
-                    child_time = 0.0
+                # if 'time' in graphToDict.items():
+                #     child_time = vals['time']
+                # else:
+                #     child_time = 0.0
                 if child_node not in self._explored:
-                    self._frontier.insert((cost + child_cost, child_node, time + child_time, path))
+                    self._frontier.insert((cost + child_cost, child_node, path))
                 elif child_node in self._frontier and isCostHigher(self._frontier, child_node, cost + child_cost):
-                    replace(self._frontier, (cost + child_cost, child_node, time + child_time, path))
+                    replace(self._frontier, (cost + child_cost, child_node, path))
                     if verbose:
                         print("Replacing: {}, New cost: {}".format(child_node, cost + child_cost))
 
